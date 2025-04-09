@@ -1,103 +1,188 @@
-import Image from "next/image";
+import Image from 'next/image'
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
+import { ArrowRight } from 'lucide-react'
+import {
+    Sidebar,
+    SidebarContent,
+    SidebarHeader,
+    SidebarMenu,
+    SidebarMenuItem,
+    SidebarMenuButton,
+    SidebarFooter,
+} from '@/components/ui/sidebar'
+import { Home, Image as ImageIcon, Settings, Upload, User } from 'lucide-react'
 
-export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+export default function HomePage() {
+    return (
+        <div className='bg-background flex h-screen overflow-hidden'>
+            <Sidebar>
+                <SidebarHeader className='flex items-center justify-between'>
+                    <div className='flex items-center gap-2'>
+                        <div className='bg-primary/10 relative h-8 w-8 overflow-hidden rounded-full'>
+                            <Image
+                                src='/84693449.png'
+                                alt='Logo'
+                                fill
+                                className='object-cover'
+                            />
+                        </div>
+                        <h1 className='text-xl font-bold'>Aram Gallery</h1>
+                    </div>
+                </SidebarHeader>
+                <SidebarContent>
+                    <SidebarMenu>
+                        <SidebarMenuItem>
+                            <Link href='/' className='w-full'>
+                                <SidebarMenuButton
+                                    isActive={true}
+                                    tooltip='Home'
+                                >
+                                    <Home className='h-5 w-5' />
+                                    <span>Home</span>
+                                </SidebarMenuButton>
+                            </Link>
+                        </SidebarMenuItem>
+                        <SidebarMenuItem>
+                            <Link href='/gallery' className='w-full'>
+                                <SidebarMenuButton
+                                    isActive={false}
+                                    tooltip='Gallery'
+                                >
+                                    <ImageIcon className='h-5 w-5' />
+                                    <span>Gallery</span>
+                                </SidebarMenuButton>
+                            </Link>
+                        </SidebarMenuItem>
+                        <SidebarMenuItem>
+                            <Link href='/upload' className='w-full'>
+                                <SidebarMenuButton
+                                    isActive={false}
+                                    tooltip='Upload'
+                                >
+                                    <Upload className='h-5 w-5' />
+                                    <span>Upload</span>
+                                </SidebarMenuButton>
+                            </Link>
+                        </SidebarMenuItem>
+                        <SidebarMenuItem>
+                            <Link href='/profile' className='w-full'>
+                                <SidebarMenuButton
+                                    isActive={false}
+                                    tooltip='Profile'
+                                >
+                                    <User className='h-5 w-5' />
+                                    <span>Profile</span>
+                                </SidebarMenuButton>
+                            </Link>
+                        </SidebarMenuItem>
+                        <SidebarMenuItem>
+                            <Link href='/settings' className='w-full'>
+                                <SidebarMenuButton
+                                    isActive={false}
+                                    tooltip='Settings'
+                                >
+                                    <Settings className='h-5 w-5' />
+                                    <span>Settings</span>
+                                </SidebarMenuButton>
+                            </Link>
+                        </SidebarMenuItem>
+                    </SidebarMenu>
+                </SidebarContent>
+                <SidebarFooter>
+                    <div className='flex items-center gap-2'>
+                        <div className='bg-primary/10 relative h-8 w-8 overflow-hidden rounded-full'>
+                            <Image
+                                src='/84693449.png'
+                                alt='User'
+                                fill
+                                className='object-cover'
+                            />
+                        </div>
+                        <div className='flex flex-col'>
+                            <span className='text-sm font-medium'>
+                                John Doe
+                            </span>
+                            <span className='text-muted-foreground text-xs'>
+                                john@example.com
+                            </span>
+                        </div>
+                    </div>
+                </SidebarFooter>
+            </Sidebar>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            <div className='flex flex-1 flex-col'>
+                <main className='flex-1 overflow-auto'>
+                    <div className='container mx-auto px-4 py-16'>
+                        <div className='grid gap-12 md:grid-cols-2'>
+                            <div className='flex flex-col justify-center space-y-6'>
+                                <h1 className='text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl'>
+                                    Your Personal Image Gallery
+                                </h1>
+                                <p className='text-muted-foreground md:text-xl'>
+                                    A modern, stylish gallery app for organizing
+                                    and showcasing your images. Built with
+                                    Next.js and Tailwind CSS.
+                                </p>
+                                <div className='flex flex-col gap-4 sm:flex-row'>
+                                    <Button asChild size='lg'>
+                                        <Link href='/gallery'>
+                                            View Gallery
+                                            <ArrowRight className='ml-2 h-4 w-4' />
+                                        </Link>
+                                    </Button>
+                                    <Button variant='outline' size='lg' asChild>
+                                        <Link href='/upload'>
+                                            Upload Images
+                                        </Link>
+                                    </Button>
+                                </div>
+                            </div>
+                            <div className='flex items-center justify-center'>
+                                <div className='relative aspect-square w-full max-w-md overflow-hidden rounded-lg'>
+                                    <Image
+                                        src='/84693449.png'
+                                        alt='Gallery Preview'
+                                        fill
+                                        className='object-cover'
+                                        priority
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className='mt-24 grid gap-8 sm:grid-cols-2 lg:grid-cols-3'>
+                            <div className='bg-card text-card-foreground rounded-lg border p-6 shadow-sm transition-all hover:shadow-md'>
+                                <h3 className='mb-2 text-xl font-semibold'>
+                                    Modern Design
+                                </h3>
+                                <p className='text-muted-foreground'>
+                                    Clean, responsive design that works on all
+                                    devices.
+                                </p>
+                            </div>
+                            <div className='bg-card text-card-foreground rounded-lg border p-6 shadow-sm transition-all hover:shadow-md'>
+                                <h3 className='mb-2 text-xl font-semibold'>
+                                    Dark Mode
+                                </h3>
+                                <p className='text-muted-foreground'>
+                                    Switch between light and dark themes for
+                                    comfortable viewing.
+                                </p>
+                            </div>
+                            <div className='bg-card text-card-foreground rounded-lg border p-6 shadow-sm transition-all hover:shadow-md'>
+                                <h3 className='mb-2 text-xl font-semibold'>
+                                    Easy Upload
+                                </h3>
+                                <p className='text-muted-foreground'>
+                                    Drag and drop interface for uploading your
+                                    images.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+    )
 }
