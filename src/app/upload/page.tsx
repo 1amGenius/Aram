@@ -10,6 +10,8 @@ import {
     Play,
     Image as ImageIcon,
     AlertTriangle,
+    Link as LinkIcon,
+    Loader2,
 } from 'lucide-react'
 import { Progress } from '@/components/ui/progress'
 import { toast } from 'sonner'
@@ -20,6 +22,8 @@ export default function UploadPage() {
     const [files, setFiles] = useState<File[]>([])
     const [previews, setPreviews] = useState<string[]>([])
     const [isUploading, setIsUploading] = useState(false)
+    const [isImporting, setIsImporting] = useState(false)
+    const [urlInput, setUrlInput] = useState('')
     const fileInputRef = useRef<HTMLInputElement>(null)
 
     const handleDragOver = useCallback((e: React.DragEvent) => {
@@ -346,6 +350,195 @@ export default function UploadPage() {
         [],
     )
 
+    // New function to handle URL imports
+    const importFromUrl = useCallback(async () => {
+        if (!urlInput.trim() || isImporting) return
+
+        setIsImporting(true)
+        let toastId: string | number | undefined
+
+        try {
+            // Show loading toast with infinite duration
+            toastId = toast.loading('Importing from URL...', {
+                duration: Infinity, // Keep toast visible until we explicitly dismiss it
+            })
+
+            // Check if URL is valid
+            const url = urlInput.trim()
+            const isValidUrl = url.match(
+                /^(http(s)?:\/\/)[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/,
+            )
+
+            if (!isValidUrl) {
+                throw new Error('Invalid URL')
+            }
+
+            // Special handling for direct video downloads
+            const extension = url.split('.').pop()?.toLowerCase()
+            const isImage = ['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(
+                extension || '',
+            )
+            const isVideo = ['mp4', 'webm', 'mov', 'avi', 'mkv'].includes(
+                extension || '',
+            )
+
+            // For regular video files
+            if (isVideo || url.includes('.mkv') || url.includes('.mp4')) {
+                try {
+                    const response = await fetch('/api/download', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ url }),
+                    })
+
+                    if (!response.ok) {
+                        const errorData = await response.json()
+                        throw new Error(
+                            errorData.error || 'Failed to download video',
+                        )
+                    }
+
+                    // Get the blob from the response
+                    const blob = await response.blob()
+
+                    // Create a File object from the blob
+                    const filename = url.split('/').pop() || 'video.mp4'
+                    const file = new File([blob], filename, { type: blob.type })
+
+                    // Add to our lists
+                    setFiles(prev => [...prev, file])
+
+                    // Generate preview for video
+                    const videoUrl = URL.createObjectURL(blob)
+                    setPreviews(prev => [...prev, videoUrl])
+
+                    // Clear input and show success
+                    setUrlInput('')
+                    toast.success('Video imported successfully', {
+                        id: toastId,
+                        description: (
+                            <p className='text-gray-600'>
+                                {filename} has been added to your selection
+                            </p>
+                        ),
+                        duration: 3000,
+                    })
+                } catch (error) {
+                    console.error('Video download error:', error)
+                    toast.error('Video Import Failed', {
+                        id: toastId,
+                        description: (
+                            <p className='text-gray-600'>
+                                {error instanceof Error
+                                    ? error.message
+                                    : 'Failed to download video. Please try again.'}
+                            </p>
+                        ),
+                        duration: 5000,
+                    })
+                }
+                return
+            }
+
+            // For images, proceed with fetching
+            if (isImage || url.startsWith('image/')) {
+                try {
+                    const response = await fetch('/api/download', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ url }),
+                    })
+
+                    if (!response.ok) {
+                        const errorData = await response.json()
+                        throw new Error(
+                            errorData.error || 'Failed to download image',
+                        )
+                    }
+
+                    const blob = await response.blob()
+
+                    // Verify the blob
+                    if (blob.size === 0) {
+                        throw new Error('Downloaded file is empty')
+                    }
+
+                    // Create a File object and add to our files
+                    const filename =
+                        url.split('/').pop()?.split('?')[0] ||
+                        `imported-image-${Date.now()}.${extension || 'jpg'}`
+                    const file = new File([blob], filename, {
+                        type: blob.type || 'image/jpeg',
+                    })
+                    const preview = URL.createObjectURL(blob)
+
+                    // Add to our lists
+                    setFiles(prev => [...prev, file])
+                    setPreviews(prev => [...prev, preview])
+
+                    // Clear input and show success
+                    setUrlInput('')
+                    toast.success('Image imported successfully', {
+                        id: toastId,
+                        description: (
+                            <p className='text-gray-600'>
+                                {filename} has been added to your selection
+                            </p>
+                        ),
+                        duration: 3000,
+                    })
+                } catch (error) {
+                    console.error('Image download error:', error)
+                    toast.error('Image Import Failed', {
+                        id: toastId,
+                        description: (
+                            <p className='text-gray-600'>
+                                {error instanceof Error
+                                    ? error.message
+                                    : 'Failed to download image. Please try again.'}
+                            </p>
+                        ),
+                        duration: 5000,
+                    })
+                }
+                return
+            } else {
+                throw new Error('Unsupported file type')
+            }
+        } catch (error) {
+            console.error('Import error:', error)
+            let errorMessage = 'Failed to import file'
+
+            if (error instanceof Error) {
+                if (error.message === 'Invalid URL') {
+                    errorMessage = 'Please enter a valid URL'
+                } else if (error.message.includes('web page')) {
+                    errorMessage =
+                        'URL points to a web page, not a direct media file. Please find the direct link to the image.'
+                } else if (error.message.includes('CORS')) {
+                    errorMessage = error.message
+                } else if (error.message.includes('timed out')) {
+                    errorMessage =
+                        'Request timed out. Please try a different URL.'
+                } else {
+                    errorMessage = error.message
+                }
+            }
+
+            toast.error('Import Failed', {
+                id: toastId,
+                description: <p className='text-gray-600'>{errorMessage}</p>,
+                duration: 5000,
+            })
+        } finally {
+            setIsImporting(false)
+        }
+    }, [urlInput, isImporting, generateVideoThumbnail])
+
     return (
         <div className='container mx-auto max-w-5xl px-4 py-12'>
             <motion.h1
@@ -359,7 +552,7 @@ export default function UploadPage() {
 
             <motion.div
                 className={cn(
-                    'mb-8 rounded-lg border-2 border-dashed p-8 transition-colors duration-200',
+                    'mb-6 rounded-lg border-2 border-dashed p-8 transition-colors duration-200',
                     'flex flex-col items-center justify-center text-center',
                     isDragging
                         ? 'border-blue-500 bg-blue-50/10'
@@ -397,11 +590,70 @@ export default function UploadPage() {
                 </Button>
             </motion.div>
 
+            <motion.div
+                className='mb-8 rounded-lg border-2 border-gray-300 p-8 transition-colors duration-200 hover:border-blue-400'
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3, duration: 0.5 }}
+            >
+                <div className='flex flex-col items-center justify-center text-center'>
+                    <LinkIcon className='mb-4 h-16 w-16 text-gray-400' />
+                    <h2 className='mb-2 text-xl font-semibold'>Paste URL</h2>
+                    <p className='mb-6 max-w-md text-gray-500'>
+                        Enter a URL to an image or video that you&apos;d like to
+                        add to your gallery
+                    </p>
+                    <p className='mb-3 text-sm text-gray-400'>
+                        Supported formats:
+                    </p>
+                    <div className='mb-6 flex flex-wrap gap-2 text-sm'>
+                        <span className='rounded-full bg-blue-50 px-3 py-1 text-blue-600'>
+                            Images: JPG, PNG, GIF, WEBP
+                        </span>
+                        <span className='rounded-full bg-purple-50 px-3 py-1 text-purple-600'>
+                            Videos: MP4, WEBM, MOV, AVI, MKV
+                        </span>
+                    </div>
+
+                    <div className='flex w-full max-w-xl flex-col gap-3 sm:flex-row sm:items-center'>
+                        <input
+                            type='url'
+                            value={urlInput}
+                            onChange={e => setUrlInput(e.target.value)}
+                            placeholder='https://example.com/image.jpg'
+                            className='flex-1 rounded-lg border border-gray-300 px-4 py-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none'
+                            onKeyDown={e => {
+                                if (e.key === 'Enter' && urlInput.trim()) {
+                                    importFromUrl()
+                                }
+                            }}
+                        />
+                        <Button
+                            className='h-[46px] gap-2 px-6'
+                            onClick={importFromUrl}
+                            disabled={!urlInput.trim() || isImporting}
+                        >
+                            {isImporting ? (
+                                <>
+                                    <Loader2 className='h-5 w-5 animate-spin' />
+                                    Importing...
+                                </>
+                            ) : (
+                                <>
+                                    <LinkIcon className='h-5 w-5' />
+                                    Import from URL
+                                </>
+                            )}
+                        </Button>
+                    </div>
+                </div>
+            </motion.div>
+
             {files.length > 0 && (
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3, duration: 0.5 }}
+                    transition={{ delay: 0.4, duration: 0.5 }}
                     className='flex flex-col'
                 >
                     <h2 className='mb-4 text-xl font-semibold'>
@@ -421,11 +673,24 @@ export default function UploadPage() {
                                     }}
                                 >
                                     <div className='group relative aspect-square'>
-                                        <img
-                                            src={preview}
-                                            alt={`Preview ${index}`}
-                                            className='h-full w-full object-cover'
-                                        />
+                                        {files[index]?.type.startsWith(
+                                            'video/',
+                                        ) ? (
+                                            <video
+                                                src={preview}
+                                                className='h-full w-full object-cover'
+                                                controls={false}
+                                                muted
+                                                loop
+                                                playsInline
+                                            />
+                                        ) : (
+                                            <img
+                                                src={preview}
+                                                alt={`Preview ${index}`}
+                                                className='h-full w-full object-cover'
+                                            />
+                                        )}
 
                                         <div className='absolute bottom-2 left-2 rounded bg-black/50 px-2 py-1 text-xs text-white'>
                                             {files[index]?.type.startsWith(
