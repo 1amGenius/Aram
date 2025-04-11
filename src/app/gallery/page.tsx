@@ -8,6 +8,7 @@ import {
     Loader2,
     Trash2,
     Download,
+    Calendar,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
@@ -19,6 +20,10 @@ interface GalleryItem {
     size: number
     preview: string
     uploadedAt: string
+}
+
+interface GroupedItems {
+    [key: string]: GalleryItem[]
 }
 
 export default function GalleryPage() {
@@ -49,13 +54,9 @@ export default function GalleryPage() {
 
         setIsDeleting(true)
         try {
-            // Remove the item from the list
             const updatedItems = items.filter(i => i.id !== item.id)
             setItems(updatedItems)
-
-            // Update localStorage
             localStorage.setItem('galleryItems', JSON.stringify(updatedItems))
-
             toast.success('Item deleted successfully')
         } catch (error) {
             console.error('Error deleting item:', error)
@@ -67,14 +68,12 @@ export default function GalleryPage() {
 
     const handleDownload = async (item: GalleryItem) => {
         try {
-            // Create a link element
             const link = document.createElement('a')
             link.href = item.preview
             link.download = item.name
             document.body.appendChild(link)
             link.click()
             document.body.removeChild(link)
-
             toast.success('Download started')
         } catch (error) {
             console.error('Error downloading item:', error)
@@ -91,11 +90,33 @@ export default function GalleryPage() {
     }
 
     const formatDate = (dateString: string) => {
-        return new Date(dateString).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-        })
+        const date = new Date(dateString)
+        const today = new Date()
+        const yesterday = new Date(today)
+        yesterday.setDate(yesterday.getDate() - 1)
+
+        if (date.toDateString() === today.toDateString()) {
+            return 'Today'
+        } else if (date.toDateString() === yesterday.toDateString()) {
+            return 'Yesterday'
+        } else {
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+            })
+        }
+    }
+
+    const groupItemsByDate = (items: GalleryItem[]): GroupedItems => {
+        return items.reduce((groups, item) => {
+            const date = formatDate(item.uploadedAt)
+            if (!groups[date]) {
+                groups[date] = []
+            }
+            groups[date].push(item)
+            return groups
+        }, {} as GroupedItems)
     }
 
     if (loading) {
@@ -105,6 +126,8 @@ export default function GalleryPage() {
             </div>
         )
     }
+
+    const groupedItems = groupItemsByDate(items)
 
     return (
         <div className='container mx-auto max-w-7xl px-4 py-8'>
@@ -130,95 +153,120 @@ export default function GalleryPage() {
                     </Button>
                 </div>
             ) : (
-                <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
-                    <AnimatePresence>
-                        {items.map(item => (
-                            <motion.div
-                                key={item.id}
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                exit={{ opacity: 0, scale: 0.9 }}
-                                className='group relative overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md'
-                            >
-                                <div className='aspect-square'>
-                                    {item.type.startsWith('video/') ? (
-                                        <div className='relative h-full w-full'>
-                                            {item.preview.startsWith(
-                                                'data:image',
-                                            ) ? (
-                                                <img
-                                                    src={item.preview}
-                                                    alt={item.name}
-                                                    className='h-full w-full object-cover'
-                                                />
-                                            ) : (
-                                                <video
-                                                    src={item.preview}
-                                                    className='h-full w-full object-cover'
-                                                    controls={false}
-                                                    muted
-                                                    loop
-                                                    playsInline
-                                                />
-                                            )}
-                                            <div className='absolute inset-0 flex items-center justify-center'>
-                                                <div className='rounded-full bg-black/50 p-2'>
-                                                    <Play className='h-6 w-6 text-white' />
+                <div className='space-y-12'>
+                    {Object.entries(groupedItems).map(([date, dateItems]) => (
+                        <motion.div
+                            key={date}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5 }}
+                        >
+                            <div className='mb-6 flex items-center gap-2'>
+                                <Calendar className='h-5 w-5 text-gray-500' />
+                                <h2 className='text-2xl font-semibold text-gray-800'>
+                                    {date}
+                                </h2>
+                            </div>
+                            <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
+                                <AnimatePresence>
+                                    {dateItems.map(item => (
+                                        <motion.div
+                                            key={item.id}
+                                            initial={{ opacity: 0, scale: 0.9 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                            exit={{ opacity: 0, scale: 0.9 }}
+                                            className='group relative overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md'
+                                        >
+                                            <div className='aspect-square'>
+                                                {item.type.startsWith(
+                                                    'video/',
+                                                ) ? (
+                                                    <div className='relative h-full w-full'>
+                                                        {item.preview.startsWith(
+                                                            'data:image',
+                                                        ) ? (
+                                                            <img
+                                                                src={
+                                                                    item.preview
+                                                                }
+                                                                alt={item.name}
+                                                                className='h-full w-full object-cover'
+                                                            />
+                                                        ) : (
+                                                            <video
+                                                                src={
+                                                                    item.preview
+                                                                }
+                                                                className='h-full w-full object-cover'
+                                                                controls={false}
+                                                                muted
+                                                                loop
+                                                                playsInline
+                                                            />
+                                                        )}
+                                                    </div>
+                                                ) : (
+                                                    <img
+                                                        src={item.preview}
+                                                        alt={item.name}
+                                                        className='h-full w-full object-cover'
+                                                    />
+                                                )}
+                                            </div>
+
+                                            <div className='absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition-opacity group-hover:opacity-100'>
+                                                <div className='flex gap-2'>
+                                                    <Button
+                                                        variant='secondary'
+                                                        size='icon'
+                                                        onClick={() =>
+                                                            handleDownload(item)
+                                                        }
+                                                        className='h-10 w-10 rounded-full bg-white/90 hover:bg-white'
+                                                    >
+                                                        <Download className='h-5 w-5' />
+                                                    </Button>
+                                                    <Button
+                                                        variant='secondary'
+                                                        size='icon'
+                                                        onClick={() =>
+                                                            handleDelete(item)
+                                                        }
+                                                        className='h-10 w-10 rounded-full bg-white/90 hover:bg-white'
+                                                        disabled={isDeleting}
+                                                    >
+                                                        <Trash2 className='h-5 w-5' />
+                                                    </Button>
                                                 </div>
                                             </div>
-                                        </div>
-                                    ) : (
-                                        <img
-                                            src={item.preview}
-                                            alt={item.name}
-                                            className='h-full w-full object-cover'
-                                        />
-                                    )}
-                                </div>
 
-                                <div className='absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition-opacity group-hover:opacity-100'>
-                                    <div className='flex gap-2'>
-                                        <Button
-                                            variant='secondary'
-                                            size='icon'
-                                            onClick={() => handleDownload(item)}
-                                            className='h-10 w-10 rounded-full bg-white/90 hover:bg-white'
-                                        >
-                                            <Download className='h-5 w-5' />
-                                        </Button>
-                                        <Button
-                                            variant='secondary'
-                                            size='icon'
-                                            onClick={() => handleDelete(item)}
-                                            className='h-10 w-10 rounded-full bg-white/90 hover:bg-white'
-                                            disabled={isDeleting}
-                                        >
-                                            <Trash2 className='h-5 w-5' />
-                                        </Button>
-                                    </div>
-                                </div>
-
-                                <div className='absolute right-0 bottom-0 left-0 bg-gradient-to-t from-black/80 to-transparent p-4 text-white'>
-                                    <div className='flex items-center gap-2'>
-                                        {item.type.startsWith('video/') ? (
-                                            <Play className='h-4 w-4' />
-                                        ) : (
-                                            <ImageIcon className='h-4 w-4' />
-                                        )}
-                                        <p className='truncate text-sm font-medium'>
-                                            {item.name}
-                                        </p>
-                                    </div>
-                                    <div className='mt-1 flex items-center justify-between text-xs text-gray-300'>
-                                        <span>{formatFileSize(item.size)}</span>
-                                        <span>
-                                            {formatDate(item.uploadedAt)}
-                                        </span>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        ))}
-                    </AnimatePresence>
+                                            <div className='absolute right-0 bottom-0 left-0 bg-gradient-to-t from-black/80 to-transparent p-4 text-white'>
+                                                <div className='flex items-center gap-2'>
+                                                    {item.type.startsWith(
+                                                        'video/',
+                                                    ) ? (
+                                                        <Play className='h-4 w-4' />
+                                                    ) : (
+                                                        <ImageIcon className='h-4 w-4' />
+                                                    )}
+                                                    <p className='truncate text-sm font-medium'>
+                                                        {item.name}
+                                                    </p>
+                                                </div>
+                                                <div className='mt-1 flex items-center justify-between text-xs text-gray-300'>
+                                                    <span>
+                                                        {formatFileSize(
+                                                            item.size,
+                                                        )}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </motion.div>
+                                    ))}
+                                </AnimatePresence>
+                            </div>
+                        </motion.div>
+                    ))}
                 </div>
             )}
         </div>
