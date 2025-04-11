@@ -89,6 +89,15 @@ export default function GalleryPage() {
         return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
     }
 
+    const formatTime = (dateString: string) => {
+        const date = new Date(dateString)
+        return date.toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true,
+        })
+    }
+
     const formatDate = (dateString: string) => {
         const date = new Date(dateString)
         const today = new Date()
@@ -241,15 +250,17 @@ export default function GalleryPage() {
                                             </div>
 
                                             <div className='absolute right-0 bottom-0 left-0 bg-gradient-to-t from-black/80 to-transparent p-4 text-white'>
-                                                <div className='flex items-center gap-2'>
-                                                    {item.type.startsWith(
-                                                        'video/',
-                                                    ) ? (
-                                                        <Play className='h-4 w-4' />
-                                                    ) : (
-                                                        <ImageIcon className='h-4 w-4' />
-                                                    )}
-                                                    <p className='truncate text-sm font-medium'>
+                                                <div className='flex items-start gap-2'>
+                                                    <div className='flex-shrink-0'>
+                                                        {item.type.startsWith(
+                                                            'video/',
+                                                        ) ? (
+                                                            <Play className='mt-[2px] h-4 w-4' />
+                                                        ) : (
+                                                            <ImageIcon className='mt-[2px] h-4 w-4' />
+                                                        )}
+                                                    </div>
+                                                    <p className='min-w-0 flex-1 truncate text-sm font-medium'>
                                                         {item.name}
                                                     </p>
                                                 </div>
@@ -257,6 +268,11 @@ export default function GalleryPage() {
                                                     <span>
                                                         {formatFileSize(
                                                             item.size,
+                                                        )}
+                                                    </span>
+                                                    <span>
+                                                        {formatTime(
+                                                            item.uploadedAt,
                                                         )}
                                                     </span>
                                                 </div>
