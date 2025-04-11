@@ -73,7 +73,7 @@ export default function UploadPage() {
     )
 
     const generateVideoThumbnail = useCallback((file: File) => {
-        return new Promise<string>(resolve => {
+        return new Promise<string>((resolve, reject) => {
             const videoUrl = URL.createObjectURL(file)
             const video = document.createElement('video')
 
@@ -90,11 +90,19 @@ export default function UploadPage() {
                 canvas.height = video.videoHeight
 
                 const ctx = canvas.getContext('2d')
-                ctx?.drawImage(video, 0, 0, canvas.width, canvas.height)
+                if (!ctx) {
+                    reject(new Error('Could not get canvas context'))
+                    return
+                }
 
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
                 const thumbnailUrl = canvas.toDataURL('image/jpeg')
                 URL.revokeObjectURL(videoUrl)
                 resolve(thumbnailUrl)
+            })
+
+            video.addEventListener('error', error => {
+                reject(error)
             })
         })
     }, [])
@@ -109,15 +117,29 @@ export default function UploadPage() {
                 processedFiles.push(file)
 
                 if (file.type.startsWith('video/')) {
-                    const thumbnail = await generateVideoThumbnail(file)
-                    processedPreviews.push(thumbnail)
+                    try {
+                        const thumbnail = await generateVideoThumbnail(file)
+                        processedPreviews.push(thumbnail)
+                    } catch (error) {
+                        console.error(
+                            'Error generating video thumbnail:',
+                            error,
+                        )
+                        // Fallback to a video element if thumbnail generation fails
+                        const videoUrl = URL.createObjectURL(file)
+                        processedPreviews.push(videoUrl)
+                    }
                 } else {
                     // For images, create a promise to get the data URL
-                    const preview = await new Promise<string>(resolve => {
-                        const reader = new FileReader()
-                        reader.onload = e => resolve(e.target?.result as string)
-                        reader.readAsDataURL(file)
-                    })
+                    const preview = await new Promise<string>(
+                        (resolve, reject) => {
+                            const reader = new FileReader()
+                            reader.onload = e =>
+                                resolve(e.target?.result as string)
+                            reader.onerror = reject
+                            reader.readAsDataURL(file)
+                        },
+                    )
                     processedPreviews.push(preview)
                 }
             }
@@ -166,7 +188,7 @@ export default function UploadPage() {
                     </div>
                 ),
                 duration: Infinity,
-                className: 'upload-progress-toast',
+                className: 'upload-progress-toast w-full',
             })
 
             for (let i = 0; i < files.length; i++) {
@@ -248,7 +270,7 @@ export default function UploadPage() {
                             </div>
                         ),
                         duration: Infinity,
-                        className: 'upload-progress-toast',
+                        className: 'upload-progress-toast w-full',
                     })
                 } catch (err) {
                     failedFiles++
@@ -272,7 +294,13 @@ export default function UploadPage() {
             if (failedFiles === 0) {
                 toast.success('Upload complete', {
                     id: toastId,
-                    description: `${processedFiles} file${processedFiles !== 1 ? 's' : ''} uploaded successfully`,
+                    description: (
+                        <p className='text-gray-600'>
+                            {processedFiles} file
+                            {processedFiles !== 1 ? 's' : ''} uploaded
+                            successfully
+                        </p>
+                    ),
                     duration: 3000,
                 })
             } else if (successfulItems.length > 0) {
@@ -281,7 +309,7 @@ export default function UploadPage() {
                     description: (
                         <div className='flex items-center gap-2'>
                             <AlertTriangle className='h-4 w-4' />
-                            <span>
+                            <span className='text-gray-600'>
                                 {successfulItems.length} uploaded, {failedFiles}{' '}
                                 failed (storage limit)
                             </span>
@@ -292,8 +320,12 @@ export default function UploadPage() {
             } else {
                 toast.error('Upload failed', {
                     id: toastId,
-                    description:
-                        'Storage limit exceeded. Try uploading smaller or fewer files.',
+                    description: (
+                        <p className='text-gray-600'>
+                            Storage limit exceeded. Try uploading smaller or
+                            fewer files.
+                        </p>
+                    ),
                     duration: 5000,
                 })
             }
@@ -676,14 +708,31 @@ export default function UploadPage() {
                                         {files[index]?.type.startsWith(
                                             'video/',
                                         ) ? (
-                                            <video
-                                                src={preview}
-                                                className='h-full w-full object-cover'
-                                                controls={false}
-                                                muted
-                                                loop
-                                                playsInline
-                                            />
+                                            <div className='relative h-full w-full'>
+                                                {preview.startsWith(
+                                                    'data:image',
+                                                ) ? (
+                                                    <img
+                                                        src={preview}
+                                                        alt={`Preview ${index}`}
+                                                        className='h-full w-full object-cover'
+                                                    />
+                                                ) : (
+                                                    <video
+                                                        src={preview}
+                                                        className='h-full w-full object-cover'
+                                                        controls={false}
+                                                        muted
+                                                        loop
+                                                        playsInline
+                                                    />
+                                                )}
+                                                <div className='absolute inset-0 flex items-center justify-center'>
+                                                    <div className='rounded-full bg-black/50 p-2'>
+                                                        <Play className='h-6 w-6 text-white' />
+                                                    </div>
+                                                </div>
+                                            </div>
                                         ) : (
                                             <img
                                                 src={preview}
