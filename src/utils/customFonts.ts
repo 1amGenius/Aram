@@ -15,10 +15,10 @@ export const Bubblegum = localFont({
     ],
     variable: "--font-bubblegum",
     display: "swap",
-});
+})
 
 export const BubblegumInline = localFont({
-    src: [  
+    src: [
         {
             path: "../../public/fonts/st-bubblegum-inline.woff",
             weight: "400",
@@ -32,4 +32,4 @@ export const BubblegumInline = localFont({
     ],
     variable: "--font-bubblegum-inline",
     display: "swap",
-}); 
+})
