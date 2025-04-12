@@ -1,12 +1,24 @@
 'use client'
 
-import { Loader2, Image, Video, Share2, LucideProps } from 'lucide-react'
+import {
+    Loader2,
+    Image,
+    Video,
+    Share2,
+    ArrowRight,
+    Brain,
+    Cloud,
+    LucideProps,
+} from 'lucide-react'
 
 export const Icons = {
     spinner: Loader2,
     image: Image,
     video: Video,
     share: Share2,
+    arrowRight: ArrowRight,
+    brain: Brain,
+    cloud: Cloud,
     google: ({ ...props }: LucideProps) => (
         <svg
             aria-hidden='true'
@@ -42,3 +54,5 @@ export const Icons = {
         </svg>
     ),
 } as const
+
+export type IconName = keyof typeof Icons
