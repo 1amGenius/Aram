@@ -3,8 +3,25 @@
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { Icons } from '@/components/ui/icons'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function LandingPage() {
+    const router = useRouter()
+    const [topGetStartedLoading, setTopGetStartedLoading] = useState(false)
+    const [topLoginLoading, setTopLoginLoading] = useState(false)
+    const [bottomGetStartedLoading, setBottomGetStartedLoading] =
+        useState(false)
+    const [bottomLoginLoading, setBottomLoginLoading] = useState(false)
+
+    const handleNavigation = (
+        path: string,
+        setLoading: (loading: boolean) => void,
+    ) => {
+        setLoading(true)
+        router.push(path)
+    }
+
     return (
         <div className='relative min-h-screen text-white'>
             {/* Background Layer */}
@@ -14,9 +31,17 @@ export default function LandingPage() {
             <div className='relative z-10'>
                 {/* Hero Section with Gradient */}
                 <div className='relative isolate overflow-hidden'>
-                    <div className='absolute top-0 left-0 h-[800px] w-[800px] transform-gpu blur-3xl'>
+                    <div className='absolute top-0 left-0 -z-10 h-[400px] w-[400px] transform-gpu blur-3xl'>
+                        {/* <div
+                            className='h-full w-full bg-gradient-to-br from-[#8b5cf6] to-[#7c3aed] opacity-70'
+                            style={{
+                                clipPath:
+                                    'polygon(0 0, 100% 0, 100% 50%, 50% 100%, 0 100%)',
+                            }}
+                        /> */}
+
                         <div
-                            className='h-full w-full bg-gradient-to-br from-[#8b5cf6] to-[#4f46e5] opacity-80'
+                            className='h-full w-full bg-gradient-to-br from-[#ffffff] to-[#d3d3d3] opacity-70'
                             style={{
                                 clipPath:
                                     'polygon(0 0, 100% 0, 100% 50%, 50% 100%, 0 100%)',
@@ -24,7 +49,7 @@ export default function LandingPage() {
                         />
                     </div>
                     {/* Hero Content */}
-                    <div className='mx-auto max-w-7xl px-6 pt-10 pb-24 sm:pb-32 lg:flex lg:px-8 lg:py-40'>
+                    <div className='relative z-10 mx-auto max-w-7xl px-6 pt-10 pb-24 sm:pb-32 lg:flex lg:px-8 lg:py-40'>
                         <div className='mx-auto max-w-2xl flex-shrink-0 lg:mx-0 lg:max-w-xl lg:pt-8'>
                             <motion.div
                                 initial={{ opacity: 0, y: 20 }}
@@ -57,15 +82,77 @@ export default function LandingPage() {
                                 <div className='mt-10 flex items-center gap-x-6'>
                                     <Link
                                         href='/signup'
-                                        className='rounded-md bg-zinc-800 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-zinc-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-600'
+                                        onClick={e => {
+                                            e.preventDefault()
+                                            handleNavigation(
+                                                '/signup',
+                                                setTopGetStartedLoading,
+                                            )
+                                        }}
+                                        className='group relative rounded-md bg-zinc-800 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-300 hover:scale-105 hover:bg-zinc-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-600 active:scale-95'
                                     >
-                                        Get started
+                                        <span className='relative z-10 flex items-center gap-2'>
+                                            {topGetStartedLoading ? (
+                                                <>
+                                                    <motion.div
+                                                        animate={{
+                                                            rotate: 360,
+                                                        }}
+                                                        transition={{
+                                                            duration: 1,
+                                                            repeat: Infinity,
+                                                            ease: 'linear',
+                                                        }}
+                                                        className='h-4 w-4 rounded-full border-2 border-white border-t-transparent'
+                                                    />
+                                                    Loading...
+                                                </>
+                                            ) : (
+                                                'Get started'
+                                            )}
+                                        </span>
+                                        <span className='absolute inset-0 rounded-md bg-gradient-to-r from-zinc-700 to-zinc-800 opacity-0 transition-opacity duration-300 group-hover:opacity-100' />
+                                        <span className='absolute inset-0 rounded-md bg-gradient-to-r from-zinc-600 to-zinc-700 opacity-0 transition-opacity duration-200 group-active:opacity-100' />
                                     </Link>
                                     <Link
                                         href='/login'
-                                        className='text-sm leading-6 font-semibold text-white'
+                                        onClick={e => {
+                                            e.preventDefault()
+                                            handleNavigation(
+                                                '/login',
+                                                setTopLoginLoading,
+                                            )
+                                        }}
+                                        className='group relative text-sm leading-6 font-semibold text-white transition-all duration-300 hover:scale-105 active:scale-95'
                                     >
-                                        Log in <span aria-hidden='true'>→</span>
+                                        <span className='relative z-10 flex items-center gap-2'>
+                                            {topLoginLoading ? (
+                                                <>
+                                                    <motion.div
+                                                        animate={{
+                                                            rotate: 360,
+                                                        }}
+                                                        transition={{
+                                                            duration: 1,
+                                                            repeat: Infinity,
+                                                            ease: 'linear',
+                                                        }}
+                                                        className='h-4 w-4 rounded-full border-2 border-white border-t-transparent'
+                                                    />
+                                                    Loading...
+                                                </>
+                                            ) : (
+                                                'Log in'
+                                            )}
+                                        </span>
+                                        <span className='absolute -bottom-1 left-0 h-0.5 w-0 bg-white transition-all duration-300 group-hover:w-full' />
+                                        <span className='absolute -bottom-1 left-0 h-0.5 w-full bg-white opacity-0 transition-opacity duration-200 group-active:opacity-100' />
+                                        <span
+                                            className='inline-block transition-transform duration-300 group-hover:translate-x-1 group-active:translate-x-2'
+                                            aria-hidden='true'
+                                        >
+                                            →
+                                        </span>
                                     </Link>
                                 </div>
                             </motion.div>
@@ -91,16 +178,24 @@ export default function LandingPage() {
 
                 {/* Features Section with Gradient */}
                 <div className='relative isolate'>
-                    <div className='absolute top-0 right-0 h-[800px] w-[800px] transform-gpu blur-3xl'>
+                    <div className='absolute top-0 right-0 -z-10 h-[300px] w-[300px] transform-gpu blur-3xl'>
+                        {/* <div
+                            className='h-full w-full bg-gradient-to-bl from-[#9333ea] to-[#7c3aed] opacity-70'
+                            style={{
+                                clipPath:
+                                    'polygon(0 0, 100% 0, 100% 100%, 50% 50%, 0 100%)',
+                            }}
+                        /> */}
+
                         <div
-                            className='h-full w-full bg-gradient-to-bl from-[#8b5cf6] to-[#4f46e5] opacity-80'
+                            className='h-full w-full bg-gradient-to-bl from-[#cfcfcf] to-[#ffffff] opacity-70'
                             style={{
                                 clipPath:
                                     'polygon(0 0, 100% 0, 100% 100%, 50% 50%, 0 100%)',
                             }}
                         />
                     </div>
-                    <div className='mx-auto max-w-7xl px-6 lg:px-8'>
+                    <div className='relative z-10 mx-auto max-w-7xl px-6 lg:px-8'>
                         <div className='mx-auto max-w-2xl lg:text-center'>
                             <motion.div
                                 initial={{ opacity: 0, y: 20 }}
@@ -125,8 +220,12 @@ export default function LandingPage() {
                                 <motion.div
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
+                                    whileHover={{
+                                        scale: 1.02,
+                                        transition: { duration: 0.2 },
+                                    }}
                                     transition={{ duration: 0.5, delay: 0.6 }}
-                                    className='flex flex-col'
+                                    className='flex flex-col rounded-lg p-6 transition-colors duration-300 hover:bg-zinc-800/50'
                                 >
                                     <dt className='flex items-center gap-x-3 text-base leading-7 font-semibold'>
                                         <Icons.image className='h-5 w-5 flex-none text-zinc-300' />
@@ -143,8 +242,12 @@ export default function LandingPage() {
                                 <motion.div
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
+                                    whileHover={{
+                                        scale: 1.02,
+                                        transition: { duration: 0.2 },
+                                    }}
                                     transition={{ duration: 0.5, delay: 0.8 }}
-                                    className='flex flex-col'
+                                    className='flex flex-col rounded-lg p-6 transition-colors duration-300 hover:bg-zinc-800/50'
                                 >
                                     <dt className='flex items-center gap-x-3 text-base leading-7 font-semibold'>
                                         <Icons.video className='h-5 w-5 flex-none text-zinc-300' />
@@ -162,8 +265,12 @@ export default function LandingPage() {
                                 <motion.div
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
+                                    whileHover={{
+                                        scale: 1.02,
+                                        transition: { duration: 0.2 },
+                                    }}
                                     transition={{ duration: 0.5, delay: 1 }}
-                                    className='flex flex-col'
+                                    className='flex flex-col rounded-lg p-6 transition-colors duration-300 hover:bg-zinc-800/50'
                                 >
                                     <dt className='flex items-center gap-x-3 text-base leading-7 font-semibold'>
                                         <Icons.share className='h-5 w-5 flex-none text-zinc-300' />
@@ -180,8 +287,12 @@ export default function LandingPage() {
                                 <motion.div
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
+                                    whileHover={{
+                                        scale: 1.02,
+                                        transition: { duration: 0.2 },
+                                    }}
                                     transition={{ duration: 0.5, delay: 1.2 }}
-                                    className='flex flex-col'
+                                    className='flex flex-col rounded-lg p-6 transition-colors duration-300 hover:bg-zinc-800/50'
                                 >
                                     <dt className='flex items-center gap-x-3 text-base leading-7 font-semibold'>
                                         <Icons.brain className='h-5 w-5 flex-none text-zinc-300' />
@@ -199,8 +310,12 @@ export default function LandingPage() {
                                 <motion.div
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
+                                    whileHover={{
+                                        scale: 1.02,
+                                        transition: { duration: 0.2 },
+                                    }}
                                     transition={{ duration: 0.5, delay: 1.4 }}
-                                    className='flex flex-col'
+                                    className='flex flex-col rounded-lg p-6 transition-colors duration-300 hover:bg-zinc-800/50'
                                 >
                                     <dt className='flex items-center gap-x-3 text-base leading-7 font-semibold'>
                                         <Icons.cloud className='h-5 w-5 flex-none text-zinc-300' />
@@ -222,16 +337,25 @@ export default function LandingPage() {
 
                 {/* CTA Section with Gradient */}
                 <div className='relative isolate mt-32 px-6 py-32 sm:mt-56 sm:py-40 lg:px-8'>
-                    <div className='absolute bottom-0 left-0 h-[800px] w-[800px] transform-gpu blur-3xl'>
+                    <div className='absolute bottom-0 left-0 -z-10 h-[450px] w-[450px] transform-gpu blur-3xl'>
                         <div
-                            className='h-full w-full bg-gradient-to-tr from-[#8b5cf6] to-[#4f46e5] opacity-80'
+                            className='h-full w-full bg-gradient-to-tr from-[#6f6d72] to-[#e6e0e0] opacity-70'
                             style={{
                                 clipPath:
                                     'polygon(0 0, 100% 0, 100% 100%, 0 50%)',
                             }}
                         />
                     </div>
-                    <div className='mx-auto max-w-2xl text-center'>
+                    <div className='absolute right-0 bottom-0 -z-10 h-[450px] w-[450px] transform-gpu blur-3xl'>
+                        <div
+                            className='h-full w-full bg-gradient-to-tl from-[#e6e0e0] to-[#6f6d72] opacity-70'
+                            style={{
+                                clipPath:
+                                    'polygon(0 0, 100% 0, 100% 50%, 50% 100%, 0 100%)',
+                            }}
+                        />
+                    </div>
+                    <div className='relative z-10 mx-auto max-w-2xl text-center'>
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -248,30 +372,77 @@ export default function LandingPage() {
                             <div className='mt-10 flex items-center justify-center gap-x-6'>
                                 <Link
                                     href='/signup'
-                                    className='rounded-md bg-zinc-800 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-zinc-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-600'
+                                    onClick={e => {
+                                        e.preventDefault()
+                                        handleNavigation(
+                                            '/signup',
+                                            setBottomGetStartedLoading,
+                                        )
+                                    }}
+                                    className='group relative rounded-md bg-zinc-800 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-300 hover:scale-105 hover:bg-zinc-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-600 active:scale-95'
                                 >
-                                    Get started
+                                    <span className='relative z-10 flex items-center gap-2'>
+                                        {bottomGetStartedLoading ? (
+                                            <>
+                                                <motion.div
+                                                    animate={{ rotate: 360 }}
+                                                    transition={{
+                                                        duration: 1,
+                                                        repeat: Infinity,
+                                                        ease: 'linear',
+                                                    }}
+                                                    className='h-4 w-4 rounded-full border-2 border-white border-t-transparent'
+                                                />
+                                                Loading...
+                                            </>
+                                        ) : (
+                                            'Get started'
+                                        )}
+                                    </span>
+                                    <span className='absolute inset-0 rounded-md bg-gradient-to-r from-zinc-700 to-zinc-800 opacity-0 transition-opacity duration-300 group-hover:opacity-100' />
+                                    <span className='absolute inset-0 rounded-md bg-gradient-to-r from-zinc-600 to-zinc-700 opacity-0 transition-opacity duration-200 group-active:opacity-100' />
                                 </Link>
                                 <Link
                                     href='/login'
-                                    className='text-sm leading-6 font-semibold text-white'
+                                    onClick={e => {
+                                        e.preventDefault()
+                                        handleNavigation(
+                                            '/login',
+                                            setBottomLoginLoading,
+                                        )
+                                    }}
+                                    className='group relative text-sm leading-6 font-semibold text-white transition-all duration-300 hover:scale-105 active:scale-95'
                                 >
-                                    Log in <span aria-hidden='true'>→</span>
+                                    <span className='relative z-10 flex items-center gap-2'>
+                                        {bottomLoginLoading ? (
+                                            <>
+                                                <motion.div
+                                                    animate={{ rotate: 360 }}
+                                                    transition={{
+                                                        duration: 1,
+                                                        repeat: Infinity,
+                                                        ease: 'linear',
+                                                    }}
+                                                    className='h-4 w-4 rounded-full border-2 border-white border-t-transparent'
+                                                />
+                                                Loading...
+                                            </>
+                                        ) : (
+                                            'Log in'
+                                        )}
+                                    </span>
+                                    <span className='absolute -bottom-1 left-0 h-0.5 w-0 bg-white transition-all duration-300 group-hover:w-full' />
+                                    <span className='absolute -bottom-1 left-0 h-0.5 w-full bg-white opacity-0 transition-opacity duration-200 group-active:opacity-100' />
+                                    <span
+                                        className='inline-block transition-transform duration-300 group-hover:translate-x-1 group-active:translate-x-2'
+                                        aria-hidden='true'
+                                    >
+                                        →
+                                    </span>
                                 </Link>
                             </div>
                         </motion.div>
                     </div>
-                </div>
-
-                {/* Bottom Gradient (Fixed) */}
-                <div className='fixed right-0 bottom-0 -z-10 h-[800px] w-[800px] transform-gpu blur-3xl'>
-                    <div
-                        className='h-full w-full bg-gradient-to-tl from-[#8b5cf6] to-[#4f46e5] opacity-80'
-                        style={{
-                            clipPath:
-                                'polygon(0 0, 100% 0, 100% 50%, 50% 100%, 0 100%)',
-                        }}
-                    />
                 </div>
             </div>
         </div>
