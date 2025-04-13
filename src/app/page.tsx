@@ -142,17 +142,19 @@ export default function LandingPage() {
                                                     Loading...
                                                 </>
                                             ) : (
-                                                'Log in'
+                                                <>
+                                                    Log in
+                                                    <span
+                                                        className='inline-block transition-transform duration-300 group-hover:translate-x-1 group-active:translate-x-2'
+                                                        aria-hidden='true'
+                                                    >
+                                                        →
+                                                    </span>
+                                                </>
                                             )}
                                         </span>
                                         <span className='absolute -bottom-1 left-0 h-0.5 w-0 bg-white transition-all duration-300 group-hover:w-full' />
                                         <span className='absolute -bottom-1 left-0 h-0.5 w-full bg-white opacity-0 transition-opacity duration-200 group-active:opacity-100' />
-                                        <span
-                                            className='inline-block transition-transform duration-300 group-hover:translate-x-1 group-active:translate-x-2'
-                                            aria-hidden='true'
-                                        >
-                                            →
-                                        </span>
                                     </Link>
                                 </div>
                             </motion.div>
@@ -295,7 +297,7 @@ export default function LandingPage() {
                                     className='flex flex-col rounded-lg p-6 transition-colors duration-300 hover:bg-zinc-800/50'
                                 >
                                     <dt className='flex items-center gap-x-3 text-base leading-7 font-semibold'>
-                                        <Icons.brain className='h-5 w-5 flex-none text-zinc-300' />
+                                        <Icons.sparkles className='h-5 w-5 flex-none text-zinc-300' />
                                         AI-Powered Search
                                     </dt>
                                     <dd className='mt-4 flex flex-auto flex-col text-base leading-7 text-zinc-300'>
@@ -428,17 +430,19 @@ export default function LandingPage() {
                                                 Loading...
                                             </>
                                         ) : (
-                                            'Log in'
+                                            <>
+                                                Log in
+                                                <span
+                                                    className='inline-block transition-transform duration-300 group-hover:translate-x-1 group-active:translate-x-2'
+                                                    aria-hidden='true'
+                                                >
+                                                    →
+                                                </span>
+                                            </>
                                         )}
                                     </span>
                                     <span className='absolute -bottom-1 left-0 h-0.5 w-0 bg-white transition-all duration-300 group-hover:w-full' />
                                     <span className='absolute -bottom-1 left-0 h-0.5 w-full bg-white opacity-0 transition-opacity duration-200 group-active:opacity-100' />
-                                    <span
-                                        className='inline-block transition-transform duration-300 group-hover:translate-x-1 group-active:translate-x-2'
-                                        aria-hidden='true'
-                                    >
-                                        →
-                                    </span>
                                 </Link>
                             </div>
                         </motion.div>

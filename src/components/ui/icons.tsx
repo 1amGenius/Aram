@@ -8,6 +8,7 @@ import {
     ArrowRight,
     Brain,
     Cloud,
+    Sparkles,
     LucideProps,
 } from 'lucide-react'
 
@@ -19,6 +20,7 @@ export const Icons = {
     arrowRight: ArrowRight,
     brain: Brain,
     cloud: Cloud,
+    sparkles: Sparkles,
     google: ({ ...props }: LucideProps) => (
         <svg
             aria-hidden='true'
