@@ -9,9 +9,30 @@ import {
     Trash2,
     Download,
     Calendar,
+    CalendarIcon,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
+import { Icons } from '@/components/ui/icons'
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogDescription,
+} from '@/components/ui/dialog'
+import { Separator } from '@/components/ui/separator'
+import { addDays, format } from 'date-fns'
+import { DateRange } from 'react-day-picker'
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from '@/components/ui/popover'
+import { Calendar as CalendarComponent } from '@/components/ui/calendar'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { Label } from '@/components/ui/label'
+import { Input } from '@/components/ui/input'
 
 interface GalleryItem {
     id: number
@@ -30,6 +51,14 @@ export default function GalleryPage() {
     const [items, setItems] = useState<GalleryItem[]>([])
     const [loading, setLoading] = useState(true)
     const [isDeleting, setIsDeleting] = useState(false)
+    const [shareDialogOpen, setShareDialogOpen] = useState(false)
+    const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null)
+    const [expiryOption, setExpiryOption] = useState('forever')
+    const [date, setDate] = useState<DateRange | undefined>({
+        from: new Date(),
+        to: addDays(new Date(), 7),
+    })
+    const [expiryHour, setExpiryHour] = useState('23:59')
 
     useEffect(() => {
         loadGalleryItems()
@@ -246,6 +275,21 @@ export default function GalleryPage() {
                                                     >
                                                         <Trash2 className='h-5 w-5' />
                                                     </Button>
+                                                    <Button
+                                                        variant='secondary'
+                                                        size='icon'
+                                                        onClick={() => {
+                                                            setSelectedItem(
+                                                                item,
+                                                            )
+                                                            setShareDialogOpen(
+                                                                true,
+                                                            )
+                                                        }}
+                                                        className='h-10 w-10 rounded-full bg-white/90 hover:bg-white'
+                                                    >
+                                                        <Icons.share className='h-5 w-5' />
+                                                    </Button>
                                                 </div>
                                             </div>
 
@@ -285,6 +329,166 @@ export default function GalleryPage() {
                     ))}
                 </div>
             )}
+
+            <Dialog open={shareDialogOpen} onOpenChange={setShareDialogOpen}>
+                <DialogContent className='bg-white/95 backdrop-blur-sm sm:max-w-md md:max-w-lg lg:max-w-xl'>
+                    <DialogHeader className='relative'>
+                        <div className='absolute -top-12 left-1/2 -translate-x-1/2'>
+                            <div className='relative'>
+                                {selectedItem?.type.startsWith('video/') ? (
+                                    <Play className='absolute -top-2 -right-2 h-5 w-5 rounded-full bg-white p-1 text-zinc-600 shadow-sm' />
+                                ) : (
+                                    <ImageIcon className='absolute -top-2 -right-2 h-5 w-5 rounded-full bg-white p-1 text-zinc-600 shadow-sm' />
+                                )}
+                                <div className='h-20 w-20 overflow-hidden rounded-full border-4 border-white bg-zinc-100 shadow-lg'>
+                                    {selectedItem?.type.startsWith('video/') ? (
+                                        <video
+                                            src={selectedItem.preview}
+                                            className='h-full w-full object-cover'
+                                            controls={false}
+                                            muted
+                                            loop
+                                            playsInline
+                                        />
+                                    ) : (
+                                        <img
+                                            src={selectedItem?.preview}
+                                            alt={selectedItem?.name}
+                                            className='h-full w-full object-cover'
+                                        />
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                        <DialogTitle className='mt-8 text-center text-xl font-semibold'>
+                            Share Media
+                        </DialogTitle>
+                        <DialogDescription className='text-center text-zinc-600'>
+                            Share this media with others
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className='py-4'>
+                        <div className='flex flex-col items-center gap-4'>
+                            <div className='w-full px-6'>
+                                <div className='relative max-w-full'>
+                                    <p
+                                        className='absolute w-[500px] truncate text-left text-sm font-medium text-zinc-900'
+                                        style={{ left: 0, right: 0 }}
+                                    >
+                                        {selectedItem?.name}
+                                    </p>
+                                </div>
+                                <div className='h-5'></div>{' '}
+                                {/* Spacer to maintain layout */}
+                            </div>
+                            <Separator className='w-full bg-gradient-to-r from-transparent via-zinc-300 to-transparent' />
+
+                            <div className='w-full px-6'>
+                                <RadioGroup
+                                    value={expiryOption}
+                                    onValueChange={setExpiryOption}
+                                    className='flex flex-col gap-4'
+                                >
+                                    <div className='flex items-center space-x-2'>
+                                        <RadioGroupItem
+                                            value='forever'
+                                            id='forever'
+                                        />
+                                        <Label htmlFor='forever'>
+                                            Never expire
+                                        </Label>
+                                    </div>
+                                    <div className='flex items-center space-x-2'>
+                                        <RadioGroupItem
+                                            value='date'
+                                            id='date'
+                                        />
+                                        <Label htmlFor='date'>
+                                            Set expiry date
+                                        </Label>
+                                    </div>
+                                </RadioGroup>
+
+                                {expiryOption === 'date' && (
+                                    <div className='mt-4 flex flex-col gap-4'>
+                                        <Popover>
+                                            <PopoverTrigger asChild>
+                                                <Button
+                                                    variant='outline'
+                                                    className='w-full justify-start text-left font-normal'
+                                                >
+                                                    <CalendarIcon className='mr-2 h-4 w-4' />
+                                                    {date?.from ? (
+                                                        date.to ? (
+                                                            <>
+                                                                {format(
+                                                                    date.from,
+                                                                    'LLL dd, y',
+                                                                )}{' '}
+                                                                -{' '}
+                                                                {format(
+                                                                    date.to,
+                                                                    'LLL dd, y',
+                                                                )}
+                                                            </>
+                                                        ) : (
+                                                            format(
+                                                                date.from,
+                                                                'LLL dd, y',
+                                                            )
+                                                        )
+                                                    ) : (
+                                                        <span>Pick a date</span>
+                                                    )}
+                                                </Button>
+                                            </PopoverTrigger>
+                                            <PopoverContent
+                                                className='w-auto p-0'
+                                                align='start'
+                                            >
+                                                <CalendarComponent
+                                                    initialFocus
+                                                    mode='range'
+                                                    defaultMonth={date?.from}
+                                                    selected={date}
+                                                    onSelect={setDate}
+                                                    numberOfMonths={2}
+                                                />
+                                            </PopoverContent>
+                                        </Popover>
+                                        <Input
+                                            type='time'
+                                            value={expiryHour}
+                                            onChange={e =>
+                                                setExpiryHour(e.target.value)
+                                            }
+                                            className='w-full'
+                                        />
+                                    </div>
+                                )}
+                            </div>
+
+                            <Button
+                                variant='outline'
+                                size='sm'
+                                onClick={() => {
+                                    if (selectedItem) {
+                                        navigator.clipboard.writeText(
+                                            selectedItem.preview,
+                                        )
+                                        toast.success(
+                                            'Link copied to clipboard',
+                                        )
+                                    }
+                                }}
+                                className='w-full max-w-[200px]'
+                            >
+                                Copy Link
+                            </Button>
+                        </div>
+                    </div>
+                </DialogContent>
+            </Dialog>
         </div>
     )
 }
