@@ -342,13 +342,10 @@ export default function GalleryPage() {
                                 )}
                                 <div className='h-20 w-20 overflow-hidden rounded-full border-4 border-white bg-zinc-100 shadow-lg'>
                                     {selectedItem?.type.startsWith('video/') ? (
-                                        <video
+                                        <img
                                             src={selectedItem.preview}
+                                            alt={selectedItem.name}
                                             className='h-full w-full object-cover'
-                                            controls={false}
-                                            muted
-                                            loop
-                                            playsInline
                                         />
                                     ) : (
                                         <img
@@ -389,21 +386,29 @@ export default function GalleryPage() {
                                     onValueChange={setExpiryOption}
                                     className='flex flex-col gap-4'
                                 >
-                                    <div className='flex items-center space-x-2'>
+                                    <div className='flex items-center space-x-3'>
                                         <RadioGroupItem
                                             value='forever'
                                             id='forever'
+                                            className='data-[state=checked]:before:animate-in data-[state=checked]:before:fade-in-0 h-5 w-5 border-2 border-zinc-400 before:h-3 before:w-3 data-[state=checked]:border-zinc-900'
                                         />
-                                        <Label htmlFor='forever'>
+                                        <Label
+                                            htmlFor='forever'
+                                            className='font-medium text-zinc-900'
+                                        >
                                             Never expire
                                         </Label>
                                     </div>
-                                    <div className='flex items-center space-x-2'>
+                                    <div className='flex items-center space-x-3'>
                                         <RadioGroupItem
                                             value='date'
                                             id='date'
+                                            className='data-[state=checked]:before:animate-in data-[state=checked]:before:fade-in-0 h-5 w-5 border-2 border-zinc-400 before:h-3 before:w-3 data-[state=checked]:border-zinc-900'
                                         />
-                                        <Label htmlFor='date'>
+                                        <Label
+                                            htmlFor='date'
+                                            className='font-medium text-zinc-900'
+                                        >
                                             Set expiry date
                                         </Label>
                                     </div>
@@ -453,6 +458,23 @@ export default function GalleryPage() {
                                                     selected={date}
                                                     onSelect={setDate}
                                                     numberOfMonths={2}
+                                                    disabled={date =>
+                                                        date <
+                                                        new Date(
+                                                            new Date().setHours(
+                                                                0,
+                                                                0,
+                                                                0,
+                                                                0,
+                                                            ),
+                                                        )
+                                                    }
+                                                    classNames={{
+                                                        day_range_middle:
+                                                            'aria-selected:bg-zinc-200 aria-selected:text-zinc-900',
+                                                        day_selected:
+                                                            'bg-zinc-900 text-white hover:bg-zinc-900 hover:text-white focus:bg-zinc-900 focus:text-white',
+                                                    }}
                                                 />
                                             </PopoverContent>
                                         </Popover>
