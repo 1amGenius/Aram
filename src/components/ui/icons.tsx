@@ -55,6 +55,36 @@ export const Icons = {
             ></path>
         </svg>
     ),
+    oneDrive: ({ ...props }: LucideProps) => (
+        <svg
+            aria-hidden='true'
+            focusable='false'
+            role='img'
+            xmlns='http://www.w3.org/2000/svg'
+            viewBox='0 0 24 24'
+            {...props}
+        >
+            <path
+                fill='currentColor'
+                d='M10.5 18.13A7.24 7.24 0 0 1 3.34 12 7.23 7.23 0 0 1 10.5 5.84c2.35 0 4.22 1.21 5.65 3l.25.39.57.92.83-.15a4.32 4.32 0 0 1 .75-.07 4.27 4.27 0 0 1 4.25 4A4.27 4.27 0 0 1 18.56 18c-.46 0-.92-.09-1.37-.28l-.47-.17H7.41A7.3 7.3 0 0 1 10.5 18.13M10.5 3a9.17 9.17 0 0 0-9.17 9.17A9.16 9.16 0 0 0 10.5 21.3a9.38 9.38 0 0 0 2.91-.47 6.33 6.33 0 0 0 5.15.04 6.28 6.28 0 0 0 3.43-8.6 6.39 6.39 0 0 0-2.92-3.44 7.9 7.9 0 0 0-8.57-5.84Z'
+            ></path>
+        </svg>
+    ),
+    microsoftLogo: ({ ...props }: LucideProps) => (
+        <svg
+            aria-hidden='true'
+            focusable='false'
+            role='img'
+            xmlns='http://www.w3.org/2000/svg'
+            viewBox='0 0 23 23'
+            {...props}
+        >
+            <path fill='currentColor' d='M11 11H0V0h11v11z' />
+            <path fill='currentColor' d='M23 11H12V0h11v11z' />
+            <path fill='currentColor' d='M11 23H0V12h11v11z' />
+            <path fill='currentColor' d='M23 23H12V12h11v11z' />
+        </svg>
+    ),
 } as const
 
 export type IconName = keyof typeof Icons
