@@ -13,6 +13,11 @@ import {
     HeartPulse,
     Shield,
     Smartphone,
+    Home,
+    Settings,
+    Menu,
+    Bell,
+    Search,
     type LucideProps,
 } from 'lucide-react'
 
@@ -29,6 +34,12 @@ export const Icons = {
     heartPulse: HeartPulse,
     shield: Shield,
     smartphone: Smartphone,
+    home: Home,
+    settings: Settings,
+    menu: Menu,
+    menuOpen: Menu,
+    bell: Bell,
+    search: Search,
 
     google: ({ ...props }: LucideProps) => (
         <svg
