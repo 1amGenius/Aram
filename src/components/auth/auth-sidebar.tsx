@@ -43,7 +43,7 @@ export function AuthSidebar() {
                         Welcome to AraM
                     </h2>
                     <p className='text-muted-foreground text-lg transition-colors hover:text-zinc-300'>
-                        Your all-in-one media management platform
+                        Your AI-powered mental companion
                     </p>
                 </div>
                 <motion.div
@@ -53,35 +53,35 @@ export function AuthSidebar() {
                     className='mt-8 grid gap-4'
                 >
                     <div className='group flex items-center space-x-4 rounded-lg border p-4 transition-all hover:border-zinc-400 hover:bg-zinc-800/50'>
-                        <Icons.image className='h-6 w-6 transition-transform group-hover:scale-110' />
+                        <Icons.notebook className='h-6 w-6 transition-transform group-hover:scale-110' />
                         <div>
                             <h3 className='font-semibold transition-colors group-hover:text-zinc-300'>
-                                Media Gallery
+                                AI Journaling
                             </h3>
                             <p className='text-muted-foreground text-sm transition-colors group-hover:text-zinc-300'>
-                                Organize and manage all your media files
+                                Smart writing with real-time sentiment analysis
                             </p>
                         </div>
                     </div>
                     <div className='group flex items-center space-x-4 rounded-lg border p-4 transition-all hover:border-zinc-400 hover:bg-zinc-800/50'>
-                        <Icons.video className='h-6 w-6 transition-transform group-hover:scale-110' />
+                        <Icons.heartPulse className='h-6 w-6 transition-transform group-hover:scale-110' />
                         <div>
                             <h3 className='font-semibold transition-colors group-hover:text-zinc-300'>
-                                Video Management
+                                Mood Tracking
                             </h3>
                             <p className='text-muted-foreground text-sm transition-colors group-hover:text-zinc-300'>
-                                Upload and manage your video content
+                                Visualize emotional patterns and gain insights
                             </p>
                         </div>
                     </div>
                     <div className='group flex items-center space-x-4 rounded-lg border p-4 transition-all hover:border-zinc-400 hover:bg-zinc-800/50'>
-                        <Icons.share className='h-6 w-6 transition-transform group-hover:scale-110' />
+                        <Icons.shield className='h-6 w-6 transition-transform group-hover:scale-110' />
                         <div>
                             <h3 className='font-semibold transition-colors group-hover:text-zinc-300'>
-                                Easy Sharing
+                                Private & Secure
                             </h3>
                             <p className='text-muted-foreground text-sm transition-colors group-hover:text-zinc-300'>
-                                Share your media with anyone, anywhere
+                                Your thoughts are protected with encryption
                             </p>
                         </div>
                     </div>
@@ -95,9 +95,9 @@ export function AuthSidebar() {
             >
                 <blockquote className='space-y-2 transition-colors hover:text-zinc-300'>
                     <p className='text-lg'>
-                        &ldquo;This platform has transformed how I manage my
-                        media. It&apos;s simple, efficient, and
-                        beautiful.&rdquo;
+                        &ldquo;AraM has transformed how I understand my
+                        emotions. It&apos;s like having a therapist in my
+                        pocket.&rdquo;
                     </p>
                     <footer className='text-sm'>Sofia Davis</footer>
                 </blockquote>

@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { Icons } from '@/components/ui/icons'
@@ -71,13 +72,14 @@ export default function LandingPage() {
                                     </Link>
                                 </div>
                                 <h1 className='mt-10 text-4xl font-bold tracking-tight sm:text-6xl'>
-                                    Your Ultimate Media Management Platform
+                                    Your AI-Powered Mental Companion
                                 </h1>
                                 <p className='mt-6 text-lg leading-8 text-zinc-300'>
-                                    Store, organize, and manage all your media
-                                    files in one place. From images to videos,
-                                    AraM has got you covered with powerful
-                                    features and seamless integration.
+                                    Capture thoughts, track moods, and gain
+                                    insights into your mental patterns. AraM
+                                    helps you understand yourself better through
+                                    intelligent journaling and emotional
+                                    awareness.
                                 </p>
                                 <div className='mt-10 flex items-center gap-x-6'>
                                     <Link
@@ -205,15 +207,16 @@ export default function LandingPage() {
                                 transition={{ duration: 0.5, delay: 0.4 }}
                             >
                                 <h2 className='text-base leading-7 font-semibold text-zinc-300'>
-                                    Everything you need
+                                    Mindful Features
                                 </h2>
                                 <p className='mt-2 text-3xl font-bold tracking-tight sm:text-4xl'>
-                                    Powerful Features for Your Media
+                                    Designed for Emotional Wellness
                                 </p>
                                 <p className='mt-6 text-lg leading-8 text-zinc-300'>
-                                    AraM provides a comprehensive set of tools
-                                    to manage your media files efficiently and
-                                    effectively.
+                                    AraM offers AI-powered tools to help you
+                                    track moods, analyze patterns, and improve
+                                    mental well-being through intelligent
+                                    journaling.
                                 </p>
                             </motion.div>
                         </div>
@@ -230,14 +233,14 @@ export default function LandingPage() {
                                     className='flex flex-col rounded-lg p-6 transition-colors duration-300 hover:bg-zinc-800/50'
                                 >
                                     <dt className='flex items-center gap-x-3 text-base leading-7 font-semibold'>
-                                        <Icons.image className='h-5 w-5 flex-none text-zinc-300' />
-                                        Media Gallery
+                                        <Icons.notebook className='h-5 w-5 flex-none text-zinc-300' />
+                                        AI Journaling
                                     </dt>
                                     <dd className='mt-4 flex flex-auto flex-col text-base leading-7 text-zinc-300'>
                                         <p className='flex-auto'>
-                                            Organize and manage all your media
-                                            files in a beautiful, intuitive
-                                            gallery interface.
+                                            Smart writing suggestions with
+                                            real-time sentiment analysis and
+                                            mood detection.
                                         </p>
                                     </dd>
                                 </motion.div>
@@ -252,15 +255,14 @@ export default function LandingPage() {
                                     className='flex flex-col rounded-lg p-6 transition-colors duration-300 hover:bg-zinc-800/50'
                                 >
                                     <dt className='flex items-center gap-x-3 text-base leading-7 font-semibold'>
-                                        <Icons.video className='h-5 w-5 flex-none text-zinc-300' />
-                                        Video Management
+                                        <Icons.heartPulse className='h-5 w-5 flex-none text-zinc-300' />
+                                        Mood Tracking
                                     </dt>
                                     <dd className='mt-4 flex flex-auto flex-col text-base leading-7 text-zinc-300'>
                                         <p className='flex-auto'>
-                                            Upload and manage your video content
-                                            with ease. Our platform supports
-                                            various video formats and provides
-                                            smooth playback.
+                                            Visualize emotional patterns with
+                                            interactive timelines and
+                                            personalized insights.
                                         </p>
                                     </dd>
                                 </motion.div>
@@ -275,14 +277,14 @@ export default function LandingPage() {
                                     className='flex flex-col rounded-lg p-6 transition-colors duration-300 hover:bg-zinc-800/50'
                                 >
                                     <dt className='flex items-center gap-x-3 text-base leading-7 font-semibold'>
-                                        <Icons.share className='h-5 w-5 flex-none text-zinc-300' />
-                                        Easy Sharing
+                                        <Icons.shield className='h-5 w-5 flex-none text-zinc-300' />
+                                        Private & Secure
                                     </dt>
                                     <dd className='mt-4 flex flex-auto flex-col text-base leading-7 text-zinc-300'>
                                         <p className='flex-auto'>
-                                            Share your media with anyone,
-                                            anywhere. Generate shareable links
-                                            with customizable permissions.
+                                            Military-grade encryption protects
+                                            your most personal thoughts and
+                                            reflections.
                                         </p>
                                     </dd>
                                 </motion.div>
@@ -297,15 +299,14 @@ export default function LandingPage() {
                                     className='flex flex-col rounded-lg p-6 transition-colors duration-300 hover:bg-zinc-800/50'
                                 >
                                     <dt className='flex items-center gap-x-3 text-base leading-7 font-semibold'>
-                                        <Icons.sparkles className='h-5 w-5 flex-none text-zinc-300' />
-                                        AI-Powered Search
+                                        <Icons.brain className='h-5 w-5 flex-none text-zinc-300' />
+                                        Pattern Analysis
                                     </dt>
                                     <dd className='mt-4 flex flex-auto flex-col text-base leading-7 text-zinc-300'>
                                         <p className='flex-auto'>
-                                            Find your media instantly using
-                                            natural language. Just describe what
-                                            you&apos;re looking for, and our AI
-                                            will find it for you.
+                                            Discover connections between your
+                                            mood, activities, and sleep patterns
+                                            through AI.
                                         </p>
                                     </dd>
                                 </motion.div>
@@ -320,15 +321,14 @@ export default function LandingPage() {
                                     className='flex flex-col rounded-lg p-6 transition-colors duration-300 hover:bg-zinc-800/50'
                                 >
                                     <dt className='flex items-center gap-x-3 text-base leading-7 font-semibold'>
-                                        <Icons.cloud className='h-5 w-5 flex-none text-zinc-300' />
-                                        Server-Side Processing
+                                        <Icons.smartphone className='h-5 w-5 flex-none text-zinc-300' />
+                                        Cross-Device Sync
                                     </dt>
                                     <dd className='mt-4 flex flex-auto flex-col text-base leading-7 text-zinc-300'>
                                         <p className='flex-auto'>
-                                            Save your mobile data. All downloads
-                                            and processing happen on our
-                                            servers, so you don&apos;t have to
-                                            worry about data usage.
+                                            Access your journal and insights
+                                            anywhere, with seamless sync across
+                                            all devices.
                                         </p>
                                     </dd>
                                 </motion.div>
@@ -364,12 +364,13 @@ export default function LandingPage() {
                             transition={{ duration: 0.5, delay: 1.2 }}
                         >
                             <h2 className='text-3xl font-bold tracking-tight sm:text-4xl'>
-                                Ready to get started?
+                                Start Your Journey to Emotional Clarity
                             </h2>
                             <p className='mx-auto mt-6 max-w-xl text-lg leading-8 text-zinc-300'>
-                                Join thousands of users who trust AraM for their
-                                media management needs. Sign up today and
-                                experience the difference.
+                                Join thousands of users who trust AraM to
+                                understand their emotional patterns and improve
+                                mental well-being. Begin your self-discovery
+                                journey today.
                             </p>
                             <div className='mt-10 flex items-center justify-center gap-x-6'>
                                 <Link
@@ -398,7 +399,7 @@ export default function LandingPage() {
                                                 Loading...
                                             </>
                                         ) : (
-                                            'Get started'
+                                            'Begin Your Journey'
                                         )}
                                     </span>
                                     <span className='absolute inset-0 rounded-md bg-gradient-to-r from-zinc-700 to-zinc-800 opacity-0 transition-opacity duration-300 group-hover:opacity-100' />
@@ -431,7 +432,7 @@ export default function LandingPage() {
                                             </>
                                         ) : (
                                             <>
-                                                Log in
+                                                Continue Your Journey
                                                 <span
                                                     className='inline-block transition-transform duration-300 group-hover:translate-x-1 group-active:translate-x-2'
                                                     aria-hidden='true'

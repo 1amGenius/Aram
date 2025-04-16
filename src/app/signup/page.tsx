@@ -41,17 +41,19 @@ export default function SignUpPage() {
                     >
                         <AuthForm mode='signup' />
                     </motion.div>
+
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 1.1, duration: 0.5 }}
                         className='text-muted-foreground px-8 text-center text-sm'
                     >
+                        Already have an account?{' '}
                         <Link
                             href='/login'
-                            className='hover:text-brand underline underline-offset-4 transition-colors'
+                            className='hover:text-primary underline underline-offset-4'
                         >
-                            Already have an account? Sign In
+                            Sign In
                         </Link>
                     </motion.p>
                 </motion.div>

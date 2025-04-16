@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import { Bubblegum, BubblegumInline } from '@/utils/customFonts'
 import './globals.css'
 import { Toaster } from '@/components/ui/sonner'
 
@@ -17,11 +16,7 @@ export default function RootLayout({
     children: React.ReactNode
 }) {
     return (
-        <html
-            lang='en'
-            suppressHydrationWarning
-            className={`${Bubblegum.variable} ${BubblegumInline.variable}`}
-        >
+        <html lang='en' suppressHydrationWarning>
             <body className={inter.className}>
                 <main>{children}</main>
                 <Toaster />

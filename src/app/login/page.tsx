@@ -27,11 +27,12 @@ export default function LoginPage() {
                         transition={{ delay: 0.7, duration: 0.5 }}
                         className='flex flex-col space-y-2 text-center'
                     >
-                        <h1 className='text-2xl font-semibold tracking-tight transition-colors hover:text-zinc-700'>
-                            Welcome back
+                        <h1 className='text-2xl font-semibold tracking-tight'>
+                            Welcome Back to AraM
                         </h1>
-                        <p className='text-muted-foreground text-sm transition-colors hover:text-zinc-700'>
-                            Enter your email to sign in to your account
+                        <p className='text-muted-foreground text-sm'>
+                            Continue your self-discovery journey. Sign in to
+                            access your private journal and mood history.
                         </p>
                     </motion.div>
                     <motion.div
@@ -47,11 +48,12 @@ export default function LoginPage() {
                         transition={{ delay: 1.1, duration: 0.5 }}
                         className='text-muted-foreground px-8 text-center text-sm'
                     >
+                        New to AraM?{' '}
                         <Link
                             href='/signup'
-                            className='hover:text-brand underline underline-offset-4 transition-colors'
+                            className='hover:text-primary underline underline-offset-4'
                         >
-                            Don&apos;t have an account? Sign Up
+                            Create an account
                         </Link>
                     </motion.p>
                 </motion.div>
