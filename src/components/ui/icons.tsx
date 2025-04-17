@@ -18,6 +18,9 @@ import {
     Menu,
     Bell,
     Search,
+    Pencil,
+    Trash2,
+    Plus,
     type LucideProps,
 } from 'lucide-react'
 
@@ -40,6 +43,9 @@ export const Icons = {
     menuOpen: Menu,
     bell: Bell,
     search: Search,
+    edit: Pencil,
+    trash: Trash2,
+    plus: Plus,
 
     google: ({ ...props }: LucideProps) => (
         <svg
