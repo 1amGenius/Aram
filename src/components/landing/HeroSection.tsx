@@ -12,7 +12,12 @@ interface HeroSectionProps {
     isLoadingLogin: boolean
 }
 
-export function HeroSection({ onGetStarted, onLogin, isLoadingGetStarted, isLoadingLogin }: HeroSectionProps) {
+export function HeroSection({
+    onGetStarted,
+    onLogin,
+    isLoadingGetStarted,
+    isLoadingLogin,
+}: HeroSectionProps) {
     return (
         <div className='relative isolate overflow-hidden'>
             <div className='absolute top-0 left-0 -z-10 h-[400px] w-[400px] transform-gpu blur-3xl'>
@@ -32,7 +37,10 @@ export function HeroSection({ onGetStarted, onLogin, isLoadingGetStarted, isLoad
                         transition={{ duration: 0.5 }}
                     >
                         <div className='mt-24 sm:mt-32 lg:mt-16'>
-                            <Link href='/gallery' className='inline-flex space-x-6'>
+                            <Link
+                                href='/gallery'
+                                className='inline-flex space-x-6'
+                            >
                                 <span className='rounded-full bg-zinc-800/50 px-3 py-1 text-sm leading-6 font-semibold text-zinc-300 ring-1 ring-zinc-800/20 transition-colors ring-inset hover:bg-zinc-800/80'>
                                     Latest Updates
                                 </span>
@@ -46,7 +54,9 @@ export function HeroSection({ onGetStarted, onLogin, isLoadingGetStarted, isLoad
                             Your Product Tagline Goes Here
                         </h1>
                         <p className='mt-6 text-lg leading-8 text-zinc-300'>
-                            Write a compelling description of your product or service. Highlight the main benefits and value proposition that sets you apart from competitors.
+                            Write a compelling description of your product or
+                            service. Highlight the main benefits and value
+                            proposition that sets you apart from competitors.
                         </p>
                         <div className='mt-10 flex items-center gap-x-6'>
                             <Link
@@ -126,7 +136,7 @@ export function HeroSection({ onGetStarted, onLogin, isLoadingGetStarted, isLoad
                         className='max-w-3xl flex-none sm:max-w-5xl lg:max-w-none'
                     >
                         <Image
-                            src='/screenshot.png'
+                            src='/PLACEHOLDER IMAGE.png'
                             alt='App screenshot'
                             width={2432}
                             height={1442}

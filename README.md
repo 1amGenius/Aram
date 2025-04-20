@@ -1,7 +1,7 @@
 # AraM - Modern Landing Page Template
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Next.js 14](https://img.shields.io/badge/Next.js-14-black)](https://nextjs.org/)
+[![Next.js 15](https://img.shields.io/badge/Next.js-15-black)](https://nextjs.org/)
 [![Tailwind CSS 3](https://img.shields.io/badge/Tailwind-3.0-blue.svg)](https://tailwindcss.com/)
 [![TypeScript 5](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org/)
 

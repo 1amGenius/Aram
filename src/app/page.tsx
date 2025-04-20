@@ -53,18 +53,16 @@ export default function LandingPage() {
                         isLoadingGetStarted={bottomGetStartedLoading}
                         isLoadingLogin={bottomLoginLoading}
                     />
+                    <Image
+                        src='/FlameBottom.png'
+                        alt='Flames at the bottom'
+                        width={2432}
+                        height={1442}
+                        priority
+                        className='-mt-180 w-full rounded-md bg-transparent' // Added -mt-32 to reduce space
+                        quality={85}
+                    />
                 </div>
-
-                {/* Replace img with Next.js Image component */}
-                <Image
-                    src='/screenshot.png'
-                    alt='App screenshot'
-                    width={2432}
-                    height={1442}
-                    priority
-                    className='w-[76rem] rounded-md bg-white/5 shadow-2xl ring-1 ring-white/10'
-                    quality={85}
-                />
             </div>
         </LazyMotion>
     )

@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Inter_Tight } from 'next/font/google'
 import './globals.css'
 
@@ -9,13 +9,18 @@ const inter = Inter_Tight({
     adjustFontFallback: true,
 })
 
-export const metadata: Metadata = {
-    title: 'Landing page',
-    description:
-        'Designed landing page to use and modify to achieve what you want easier!',
-    viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
+export const viewport: Viewport = {
     themeColor: '#18181B',
     colorScheme: 'dark',
+    width: 'device-width',
+    initialScale: 1,
+}
+
+export const metadata: Metadata = {
+    title: 'AraM - Modern Landing Page Template',
+    description:
+        'A sleek, responsive, and customizable landing page template built with Next.js 15',
+    // Remove viewport, themeColor, and colorScheme from here
 }
 
 export default function RootLayout({
