@@ -21,7 +21,7 @@ AraM is a modern, fully responsive landing page template that combines beautiful
 
 ## 🔥 Live Demo
 
-[View Demo](your-demo-link)
+[View Demo](aramlanding.vercel.app)
 
 ## 🛠️ Technologies Used
 
