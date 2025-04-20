@@ -1,13 +1,13 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Inter_Tight } from 'next/font/google'
 import './globals.css'
-import { Toaster } from '@/components/ui/sonner'
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter_Tight({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-    title: 'AraM',
-    description: 'Your media management platform',
+    title: 'Landing page',
+    description:
+        'Designed landing page to use and modify to achieve what you want easier!',
 }
 
 export default function RootLayout({
@@ -19,7 +19,6 @@ export default function RootLayout({
         <html lang='en' suppressHydrationWarning>
             <body className={inter.className}>
                 <main>{children}</main>
-                <Toaster />
             </body>
         </html>
     )
